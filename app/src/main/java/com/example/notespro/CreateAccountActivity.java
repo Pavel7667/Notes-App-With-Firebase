@@ -1,5 +1,6 @@
 package com.example.notespro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -7,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class CreateAccountActivity extends AppCompatActivity {
-// create links
+    // create links
     EditText emailEditText;
     EditText passwordEditText;
     EditText confirmPasswordEditText;
@@ -39,7 +39,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         loginBtnTextView = findViewById(R.id.login_text_view_btn);
         // one BTN for registry
         createAccountBtn.setOnClickListener(v -> createAccount());
-        loginBtnTextView.setOnClickListener(v -> finish());
+        loginBtnTextView.setOnClickListener
+                (v -> startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class)));
     }
 
 
@@ -68,12 +69,14 @@ public class CreateAccountActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         changeInProgress(false);
                         if (task.isComplete()) {
-                            Toast.makeText(CreateAccountActivity.this, "YES", Toast.LENGTH_LONG).show();
+                            //login success
+                            Utility.showToast(CreateAccountActivity.this, "YES");
                             firebaseAuth.getCurrentUser().sendEmailVerification();
                             firebaseAuth.signOut();
                             finish();
                         } else {
-                            Toast.makeText(CreateAccountActivity.this, task.getException().getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            //login fail
+                            Utility.showToast(CreateAccountActivity.this, task.getException().getLocalizedMessage());
                         }
                     }
                 });
