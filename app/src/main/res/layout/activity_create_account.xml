@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/sign_up_icon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_centerHorizontal="true"
         android:layout_marginVertical="32dp"
         android:src="@drawable/newuser" />
@@ -52,14 +52,14 @@
 
 
         <EditText
-            android:id="@+id/eddit_text"
+            android:id="@+id/set_email_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:background="@drawable/rounded_corner"
-            android:hint="\@email_id"
+            android:hint="set_email_id"
             android:inputType="textEmailAddress"
-            android:padding="8dp"
+            android:padding="12dp"
             android:textSize="20dp" />
 
         <EditText
@@ -70,7 +70,7 @@
             android:background="@drawable/rounded_corner"
             android:hint="password"
             android:inputType="textEmailAddress"
-            android:padding="8dp"
+            android:padding="12dp"
             android:textSize="20dp" />
 
         <EditText
@@ -81,7 +81,7 @@
             android:background="@drawable/rounded_corner"
             android:hint="confirm_password_"
             android:inputType="textEmailAddress"
-            android:padding="8dp"
+            android:padding="12dp"
             android:textSize="20dp" />
 
         <com.google.android.material.button.MaterialButton
