@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -17,6 +18,9 @@ public class NoteDetailsActivity extends AppCompatActivity {
     EditText titleEditText;
     EditText contentEditText;
     ImageButton saveNoteBtn;
+    TextView pageTitleTextView;
+    String title, content, docId;
+    boolean isEditMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +30,24 @@ public class NoteDetailsActivity extends AppCompatActivity {
         titleEditText = findViewById(R.id.notes_title_text);
         contentEditText = findViewById(R.id.notes_content_text);
         saveNoteBtn = findViewById(R.id.save_note_btn);
+        pageTitleTextView = findViewById(R.id.page_title);
 
-        saveNoteBtn.setOnClickListener(v->saveNote());
+        //receive data
+        title = getIntent().getStringExtra("title");
+        content = getIntent().getStringExtra("content");
+        docId = getIntent().getStringExtra("docId");
+
+        if (docId != null && !docId.isEmpty()) {
+            isEditMode=true;
+        }
+        titleEditText.setText(title);
+        contentEditText.setText(content);
+
+        if (isEditMode){
+            pageTitleTextView.setText("Edit your Note");
+        }
+
+        saveNoteBtn.setOnClickListener(v -> saveNote());
     }
 
     private void saveNote() {
@@ -46,17 +66,24 @@ public class NoteDetailsActivity extends AppCompatActivity {
     }
 
     void saveNoteToFirebase(Note note) {
-       DocumentReference documentReference = Utility.getCollectionReferenceForNotes().document();
+        DocumentReference documentReference;
+        if (isEditMode) {
+            //update
+            documentReference = Utility.getCollectionReferenceForNotes().document(docId);
+        } else {
+            //create new
+             documentReference = Utility.getCollectionReferenceForNotes().document();
+        }
         documentReference.set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isComplete()) {
                     //note is added
-                    Utility.showToast(NoteDetailsActivity.this,"Note added successfully");
+                    Utility.showToast(NoteDetailsActivity.this, "Note added successfully");
                     finish();
                 } else {
                     // note NOT added
-                    Utility.showToast(NoteDetailsActivity.this,"Note NOT added ");
+                    Utility.showToast(NoteDetailsActivity.this, "Note NOT added ");
 
                 }
             }
