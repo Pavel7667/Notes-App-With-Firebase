@@ -33,6 +33,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
         contentEditText = findViewById(R.id.notes_content_text);
         saveNoteBtn = findViewById(R.id.save_note_btn);
         pageTitleTextView = findViewById(R.id.page_title);
+        deleteNodeBtn = findViewById(R.id.delete_note_text_view_btn);
 
         //receive data
         title = getIntent().getStringExtra("title");
