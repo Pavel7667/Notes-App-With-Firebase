@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ public class NoteDetailsActivity extends AppCompatActivity {
     TextView pageTitleTextView;
     String title, content, docId;
     boolean isEditMode;
+    TextView deleteNodeBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +47,29 @@ public class NoteDetailsActivity extends AppCompatActivity {
 
         if (isEditMode){
             pageTitleTextView.setText("Edit your Note");
+            deleteNodeBtn.setVisibility(View.VISIBLE);
         }
-
         saveNoteBtn.setOnClickListener(v -> saveNote());
+        deleteNodeBtn.setOnClickListener(v->deleteNodeFromFireBase());
+    }
+
+    private void deleteNodeFromFireBase() {
+        DocumentReference documentReference;
+
+            documentReference = Utility.getCollectionReferenceForNotes().document(docId);
+        documentReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isComplete()) {
+                    //note is del
+                    Utility.showToast(NoteDetailsActivity.this, "Note is DEL");
+                    finish();
+                } else {
+                    // note NOT del
+                    Utility.showToast(NoteDetailsActivity.this, "Note is NOT del");
+                }
+            }
+        });
     }
 
     private void saveNote() {
@@ -84,7 +106,6 @@ public class NoteDetailsActivity extends AppCompatActivity {
                 } else {
                     // note NOT added
                     Utility.showToast(NoteDetailsActivity.this, "Note NOT added ");
-
                 }
             }
         });
