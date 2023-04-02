@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 
 public class Utility {
     static void showToast(Context context, String message) {
@@ -26,7 +27,12 @@ public class Utility {
     }
 
     static String timestampToString(Timestamp timestamp) {
-        return new SimpleDateFormat("MM/dd/yyyy").format(timestamp.toDate());
+        Date date = timestamp.toDate();
+        String dayOfMonth = new SimpleDateFormat("dd").format(date);
+        String monthString = new SimpleDateFormat("MMMM").format(date);
+        String year = new SimpleDateFormat("yyyy").format(date);
+        String time = new SimpleDateFormat("HH:mm").format(date);
+        return String.format("%s_%s_%s // %s", dayOfMonth, monthString, year, time);
     }
 }
 
